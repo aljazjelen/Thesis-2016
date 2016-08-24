@@ -1,0 +1,217 @@
+﻿    @model IEnumerable<ThesisApplication.Models.fileUpload>
+
+@{
+    Layout = "~/Views/Shared/_OpenTheHatch.cshtml";
+    ViewData["Title"] = "View your uploaded cads";
+}
+<label hidden id="hiddenPath">@ViewData["filePath"]</label>
+
+
+<script src="~/js/three.js"></script>
+<script src="~/js/three.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/STLLoader.js"></script>
+<script src="~/js/TrackballControls.js"></script>
+<script src="~/js/stats.js"></script>
+<script src="~/js/detector.js"></script>
+<script src="~/js/OrbitControls.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<div class="row">
+    <div class="col-md-8">
+        <div id="custom_canvas"></div>
+    </div>
+    <div class="col-md-4">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.inputFilename)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.caseName)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.inputFilename)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.caseName)
+                        </td>
+                        <td>
+                            <a asp-action="viewFileUpload" asp-route-id="@item.ID">Display model</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+<script>
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
+    
+    // Routine to get URL of server location
+    var win_protocol = window.location.protocol;
+    var win_hostname = window.location.hostname;
+    var win_port = window.location.port;
+    var filePath = "";
+
+    // Routine to assemble path to chosen file
+    if (win_protocol.length > 1)
+    {
+        filePath = filePath + win_protocol;
+        if (win_hostname.length > 1)
+        {
+            filePath = filePath + "\\\\" + win_hostname;
+        }
+        if (win_port.length > 1)
+        {
+            filePath = filePath + ":" + win_port;
+        }
+    }
+    
+    filePath = filePath + document.getElementById("hiddenPath").innerHTML;
+
+    // Declare variables to use
+    var container, stats;
+    var camera, controls, scene, renderer;
+    var cross;
+
+    // Initialize
+    init();
+
+    // Animate
+    animate();
+
+
+    // Function for initializing scene, controls, camera, world
+    function init() {
+        // Declare and set camera
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000);
+        camera.position.z = 500;
+
+        // Declare and set controls
+        controls = new THREE.TrackballControls(camera);
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+        controls.keys = [65, 83, 68];
+
+        // Add listener to render() when change in controls 
+        controls.addEventListener('change', render);
+
+        // Declare scene
+        scene = new THREE.Scene();
+
+        // Declare fog
+        //scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+
+        // Declare geometry
+        var geometry = new THREE.CylinderGeometry(0, 10, 30, 4, 1);
+
+        // Declare material
+        var material = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading });
+
+        // Declare loader of STL files
+        var loader = new THREE.STLLoader()
+
+        // Declare material
+        var material = new THREE.MeshLambertMaterial({ ambient: 0xFB3917, color: 0xfdd977 });
+
+        // Set loader options and load geometry to scene
+        loader.load(filePath, function (geometry) {
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            scene.add(mesh);
+        });
+
+        // ADD COORDINATE SYSTEM!!
+        for (var i = 0; i < 500; i++) {
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.position.x = (Math.random() - 0.5) * 1000;
+            mesh.position.y = (Math.random() - 0.5) * 1000;
+            mesh.position.z = (Math.random() - 0.5) * 1000;
+            mesh.updateMatrix();
+            mesh.matrixAutoUpdate = false;
+            scene.add(mesh);
+        }
+
+        // Set html text of hidden label DOM element back to "null" - safety first
+        document.getElementById("hiddenPath").innerHTML = "null";
+
+        // Declare and define lights
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+        light = new THREE.DirectionalLight(0x002288);
+        light.position.set(-1, -1, -1);
+        scene.add(light);
+        light = new THREE.AmbientLight(0x222222);
+        scene.add(light);
+
+        // Declare renderer
+        renderer = new THREE.WebGLRenderer({ antialias: false });
+
+        // Set fog to renderer
+        //renderer.setClearColor(scene.fog.color);
+
+        // Set pixel ration of renderer
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Set size of renderer
+        renderer.setSize(custom_canvas.clientWidth, custom_canvas.clientWidth * window.innerHeight / window.innerWidth);
+        //renderer.setSize(window.innerWidth / 2.5, window.innerHeight / 2.5);
+
+        // Find customly created canvas and store its path to variable
+        container = document.getElementById('custom_canvas');
+
+        // Append renderer as DOM element to custom canvas
+        container.appendChild(renderer.domElement);
+
+        // Declarer stats and append them to custom canvas
+        stats = new Stats();
+        //container.appendChild( stats.dom );
+
+        // Add event listener to trigger onWindowResize() when resize
+        window.addEventListener('resize', onWindowResize, false);
+
+        // Render all settings
+        render();
+    }
+    function onWindowResize() {
+        var custom_canvas = document.getElementById("custom_canvas");
+        var custom_width = custom_canvas.clientWidth;
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(custom_width, custom_width * window.innerHeight / window.innerWidth);
+        //renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
+        controls.handleResize();
+        render();
+    }
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+    }
+    function render() {
+        renderer.render(scene, camera);
+        stats.update();
+    }
+</script>

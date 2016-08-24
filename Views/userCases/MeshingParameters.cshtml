@@ -1,0 +1,220 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "MeshingParameters";
+    Layout = "_MeshingWorkbench";
+}
+
+<h2>Parameters defining mesh</h2>
+<h5>Below are meshing parameters which can be modified by the user. Description of them can be found at <a href="http://cfd.direct/openfoam/user-guide/snappyhexmesh/">OpenFOAM user manual</a>, where all parameters are explained individually.</h5>
+<h5>If user is not fluent with meshing techniques, please set values to default. In this case, mesh will be coarser and consequently results less accurate.</h5>
+<br />
+<hr />
+<form asp-action="MeshingParameters">
+    <div class="form-horizontal">
+        <h4>Chosen case:</h4>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.caseName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.caseName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.inputFilename)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.uploadDate)
+            </dd>
+        </dl>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @Html.Partial("/Views/Shared/_partialSimulationHiddenFields.cshtml")
+        @Html.Partial("/Views/Shared/_partialGeneralHiddenFields.cshtml")
+
+        
+
+
+
+
+        <div class="form-group">
+            <label asp-for="mesh_refSurfLvlMax" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refSurfLvlMax" class="form-control" />
+                <span asp-validation-for="mesh_refSurfLvlMax" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refSurfLvlMin" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refSurfLvlMin" class="form-control" />
+                <span asp-validation-for="mesh_refSurfLvlMin" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_numLayers" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_numLayers" class="form-control" id="layersNumber"/>
+                <span asp-validation-for="mesh_numLayers" class="text-danger" />
+                <p class="has-error" id="mesh_layers_error"></p>
+            </div>
+        </div>
+
+
+        
+
+        <br />
+        <hr />
+
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <h4>Layer parameters</h4>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="mesh_expRatio" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_expRatio" class="form-control" />
+                        <span asp-validation-for="mesh_expRatio" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="mesh_finLayerThickness" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_finLayerThickness" class="form-control" />
+                        <span asp-validation-for="mesh_finLayerThickness" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="mesh_minThickness" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_minThickness" class="form-control" />
+                        <span asp-validation-for="mesh_minThickness" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" id="layer_1st">
+                <h4>1st layer</h4>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="mesh_refRegDist1" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegDist1" class="form-control" />
+                        <span asp-validation-for="mesh_refRegDist1" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="mesh_refRegLvl1" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegLvl1" class="form-control" />
+                        <span asp-validation-for="mesh_refRegLvl1" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3" id="layer_2nd">
+                <h4>2nd layer</h4>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="mesh_refRegDist2" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegDist2" class="form-control" />
+                        <span asp-validation-for="mesh_refRegDist2" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="mesh_refRegLvl2" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegLvl2" class="form-control" />
+                        <span asp-validation-for="mesh_refRegLvl2" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3" id="layer_3rd">
+                <h4>3rd layer</h4>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="mesh_refRegDist3" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegDist3" class="form-control" />
+                        <span asp-validation-for="mesh_refRegDist3" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="mesh_refRegLvl3" class="col-md-10 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="mesh_refRegLvl3" class="form-control" />
+                        <span asp-validation-for="mesh_refRegLvl3" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save new parameters" class="btn myButton" />
+                        <p class="has-error" style="color:red">@ViewData["meshParamError"]</p>
+                    </div>
+                </div>
+            </div>
+</form>
+
+<script src="~/js/customJavaScript.js"></script>
+
+<form asp-action="MeshDefaultParameters">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ID" />
+        <input type="hidden" asp-for="caseName" />
+        <input type="hidden" asp-for="inputFilename" />
+        <input type="hidden" asp-for="meshStatus" />
+        <input type="hidden" asp-for="meshedDate" />
+        <input type="hidden" asp-for="status" />
+        <input type="hidden" asp-for="unitModel" />
+        <input type="hidden" asp-for="userName" />
+        <input type="hidden" asp-for="uploadDate" />
+
+        <input type="hidden" asp-for="mesh_refSurfLvlMax" />
+        <input type="hidden" asp-for="mesh_refSurfLvlMin" />
+        <input type="hidden" asp-for="mesh_numLayers" />
+
+        <input type="hidden" asp-for="mesh_expRatio" />
+        <input type="hidden" asp-for="mesh_finLayerThickness" />
+        <input type="hidden" asp-for="mesh_minThickness" />
+
+        <input type="hidden" asp-for="mesh_refRegDist1" />
+        <input type="hidden" asp-for="mesh_refRegLvl1" />
+
+        <input type="hidden" asp-for="mesh_refRegDist2" />
+        <input type="hidden" asp-for="mesh_refRegLvl2" />
+
+        <input type="hidden" asp-for="mesh_refRegDist3" />
+        <input type="hidden" asp-for="mesh_refRegLvl3" />
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Default parameters" class="btn myButton" />
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+<div>
+    <a class="myButton" asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

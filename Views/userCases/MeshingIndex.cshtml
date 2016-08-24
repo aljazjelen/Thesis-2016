@@ -1,0 +1,58 @@
+@model IEnumerable<ThesisApplication.Models.userCase>
+
+
+@{
+    // Added layout as it is nested in _MeshingWorkbench layout
+    ViewData["Title"] = "MeshingIndex";
+    Layout = "~/Views/Shared/_MeshingWorkbench.cshtml";
+}
+
+<h2>Meshing workbench</h2>
+<h5>Cases are unique entities. They have their own geometry, mesh and results</h5>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.caseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.caseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.inputFilename)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.uploadDate)
+                </td>
+                <td>
+                    <a class="myButton" asp-action="MeshingParameters" asp-route-id="@item.ID">Edit mesh parameters</a> |
+                    <a class="myButton btn-warning" asp-action="MeshingDetails" asp-route-id="@item.ID">Submit to meshing</a> |
+                    <a class="myButton btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <!--<a asp-action="Index">Back to List</a>-->
+</div>

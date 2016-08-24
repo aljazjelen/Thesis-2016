@@ -1,0 +1,141 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "MeshingDetails";
+    Layout = "_MeshingWorkbench";
+}
+
+<link rel="stylesheet" type="text/css" href="~/css/customLayoutStyle.css">
+
+<h2>Mesh details</h2>
+<h5>You want to submit following case to meshing stage. Please review all the parameters before submitting as after submision, <b>parameters cannot be modified</b>.</h5>
+<br />
+
+<div>
+    <h4>Your selected case</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.caseName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.caseName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.inputFilename)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.inputFilename)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_expRatio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_expRatio)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_finLayerThickness)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_finLayerThickness)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_minThickness)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_minThickness)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_numLayers)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_numLayers)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegDist1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegDist1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegDist2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegDist2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegDist3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegDist3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegLvl1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegLvl1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegLvl2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegLvl2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refRegLvl3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refRegLvl3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refSurfLvlMax)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refSurfLvlMax)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.mesh_refSurfLvlMin)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.mesh_refSurfLvlMin)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.meshedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.meshedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.unitModel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.unitModel)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.uploadDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.uploadDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.userName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.userName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <!--<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |-->
+    <a class="has-error myButton" asp-action="MeshingIndex">Submit to meshing phase</a>
+</div>
+<div>
+    <!--<a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |-->
+    <a class="myButton" asp-action="MeshingIndex">Back to List</a>
+</div>

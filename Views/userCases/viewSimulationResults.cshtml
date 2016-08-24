@@ -1,0 +1,157 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "viewSimulationResults";
+    Layout = "_layout";
+}
+
+<script src="~/js/Math.js"></script>
+<script src="~/js/inflate.min.js"></script>
+<script src="~/js/three.js"></script>
+<script src="~/js/three.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/VTKLoader.js"></script>
+<script src="~/js/TrackballControls.js"></script>
+<script src="~/js/stats.js"></script>
+<script src="~/js/detector.js"></script>
+<script src="~/js/OrbitControls.js"></script>
+<script src="~/js/Lut.js"></script>
+
+<script src="~/js/stats.min.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<label hidden id="hiddenPath">@ViewData["filePath"]</label>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Visualization of results workbench</h2>
+<h5>Inspect and evaluate results of already completed cases.</h5>
+<br />
+
+<div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#coefficients">Residuals, coefficients and probe locations</a></li>
+        <li><a data-toggle="tab" href="#2dimensional">Sectional plots and graphs</a></li>
+        <li><a data-toggle="tab" href="#3dimensional">Surface and model plots</a></li>
+    </ul>
+    
+
+    <div class="row">
+        <div class="tab-content">
+
+            <!-- 1st tab -->
+            <div id="coefficients" class="tab-pane fade in active">
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+                        <br />
+                        <h4>Chosen case:</h4>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.caseName)</dt>
+                        <dd>@Html.DisplayFor(model => model.caseName)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.inputFilename)</dt>
+                        <dd>@Html.DisplayFor(model => model.inputFilename)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.status)</dt>
+                        <dd>@Html.DisplayFor(model => model.status)</dd>
+                    </dl>
+                    <br />
+                    <hr />
+                    <ul class="nav nav-tabs-justified">
+                        <li><a class="myButton active" data-toggle="tab" onclick="setGraphContent('plot_residuals')">Residuals</a></li>
+                        <li><a class="myButton" data-toggle="tab" onclick="setGraphContent('plot_coefficients')">Lift and drag coefficients</a></li>
+                        <li><a class="myButton" data-toggle="tab" onclick="setGraphContent('plot_probes')">Probe locations</a></li>
+                    </ul>                             
+                </div>
+                <div class="col-md-9">
+                    <h3>Coeficients and residuals</h3>
+                    <p>Some content.</p>
+                    <div id="plot_region" class="fade in active"></div>
+                </div>
+            </div>
+
+            <!-- 2nd tab -->
+            <div id="2dimensional" class="tab-pane fade">
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+                        <br />
+                        <h4>Chosen case:</h4>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.caseName)</dt>
+                        <dd>@Html.DisplayFor(model => model.caseName)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.inputFilename)</dt>
+                        <dd>@Html.DisplayFor(model => model.inputFilename)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.status)</dt>
+                        <dd>@Html.DisplayFor(model => model.status)</dd>
+                    </dl>
+                    <br />
+                    <hr />
+                    <ul class="nav nav-tabs-justified">
+                        <li><a class="myButton active" data-toggle="tab" onclick="set2DContent('velocity','obstacle')">Velocity X</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set2DContent('velocity', 'obstacle')">Velocity X</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set2DContent('velocity', 'obstacle')">Velocity Y</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set2DContent('patch_left2_pressure', 'patch_left')">Velocity</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set2DContent('cut_1_pressure', 'cut_1')">Pressure</a></li>
+                    </ul> 
+                </div>
+                <div class="col-md-9">
+                    <h3>Sectional plots and graphs</h3>
+                    <p>Left sub-menu offers all available selections for visualization</p>
+                    <div id="info">
+                        <dl>
+                            <dd>Toggle legend ON/OFF : button D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Change legend colors : button A</dd>
+                            <dd>Change Legend layout : button F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Change color numbers : button S</dd>
+                        </dl>
+
+                    </div>
+                    <div id="2D_content_canvas" style="max-width:1080px"></div>
+                </div>
+            </div>
+
+            <!-- 3rd tab -->
+            <div id="3dimensional" class="tab-pane fade">
+                <div class="col-md-3">
+                    <dl class="dl-horizontal">
+                        <br />
+                        <h4>Chosen case:</h4>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.caseName)</dt>
+                        <dd>@Html.DisplayFor(model => model.caseName)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.inputFilename)</dt>
+                        <dd>@Html.DisplayFor(model => model.inputFilename)</dd>
+                        <dt style="text-align:left; width:100px;">@Html.DisplayNameFor(model => model.status)</dt>
+                        <dd>@Html.DisplayFor(model => model.status)</dd>
+                    </dl>
+                    <br />
+                    <hr />
+                    <ul class="nav nav-tabs-justified">
+                        <li><a class="myButton active" data-toggle="tab" onclick="set3DContent('velocity', 'obstacle')">Velocity X</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set3DContent('velocity', 'obstacle')">Velocity Y</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set3DContent('velocity', 'obstacle')">Velocity Z</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set3DContent('velocity', 'obstacle')">Absolute Velocity</a></li>
+                        <li><a class="myButton active" data-toggle="tab" onclick="set3DContent('cylinder2_pressure', 'cylinder')">Relative Pressure</a></li>
+                    </ul>  
+                </div>
+                <div class="col-md-9">
+                    <h3>Surface and model plots</h3>
+                    <p>Left sub-menu offers all available selections for visualization</p>
+                    <div id="3D_content_canvas" style="max-width:1080px"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+
+    </div>
+</div>
+
+<script src="~/js/myVisualization/my3Dsurfaces.js"></script>
+<script src="~/js/myVisualization/my2Dplanes.js"></script>
+<script src="~/js/myVisualization/myGraphs.js"></script>

@@ -1,0 +1,90 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br /><br /><br /><br /><br /><br />
+<h2>Create new case</h2>
+
+<form asp-action="CreateUploadButton" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <br />
+        <h4>Here you can upload new cad models with specific case name for Digital Wind Tunnel simulation.</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        
+
+        <h5>Please give your case a name</h5>
+        <div class="form-group">
+            <label asp-for="caseName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="caseName" class="form-control" />
+                <span asp-validation-for="caseName" class="text-danger" />
+                <p class="has-error">@ViewData["case_errormessage"]</p>
+            </div>
+        </div>
+        <br />
+        <h5>Digital Wind Tunnel operates with <a href="https://en.wikipedia.org/wiki/International_System_of_Units">SI Units</a> which are part of <a href="https://en.wikipedia.org/wiki/ISO/IEC_80000">"ISO/IEC 80000 Quantities and Units"</a> standard. </h5>
+        <h5>If model was created in any other units of length, please choose appropriately</h5>
+
+        <br />
+        <div class="form-group">
+            <label asp-for="unitModel" class="col-md-2"></label>
+            <select asp-for="unitModel" class="col-md-2" id="Select1">
+                <option selected="selected" value="m">Metres</option>
+                <option value="cm">Centimetres</option>
+                <option value="mm">Millimetres</option>
+                <option value="inches">Inches</option>
+            </select>
+            <span asp-validation-for="unitModel" class="text-danger" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="inputFilename" class="col-md-2 control-label"></label>
+            <div class="col-md-8">
+                <label class="btn btn-info" style="width:76%">
+                    <span class="glyphicon glyphicon-upload"></span>
+                    <input name="uploadedFile" type="file" style="display:none" formenctype="multipart/form-data"
+                           onchange="$('#upload-file-info').html($(this).val()).addClass('alert').removeClass('label')" />
+                    Upload file
+                </label>
+                <br />
+                <div class="label alert-success" style="margin-top:5px; width:80%" id="upload-file-info"></div>
+                <span asp-validation-for="inputFilename" class="text-danger" />
+                <p class="has-error">@ViewData["file_errormessage"]</p>
+            </div>
+        </div>
+
+
+        <!--
+    <div class="form-group">
+        <label asp-for="ProductImage" class="control-label col-md-2"></label>
+        <div class="col-md-3">
+            <input asp-for="ProductImage" class="form-control" />
+            <span asp-validation-for="ProductImage" class="text-danger"></span>
+        </div>
+    </div>
+        -->
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label class="btn btn-primary">
+                    <span class="glyphicon glyphicon-floppy-open"></span>
+                    Create case
+                    <input type="submit" value="Create" style="display:none" />
+                </label>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

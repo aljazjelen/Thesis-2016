@@ -1,0 +1,66 @@
+@model IEnumerable<ThesisApplication.Models.fileUpload>
+
+@{
+    Layout = "~/Views/Shared/_OpenTheHatch.cshtml";
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.userName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.caseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unitModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+ 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.userName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.inputFilename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.caseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unitModel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uploadDate)
+            </td>
+            <td>
+                
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+
+</table>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>

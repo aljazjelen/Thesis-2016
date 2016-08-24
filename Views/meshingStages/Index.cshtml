@@ -1,0 +1,70 @@
+@model IEnumerable<ThesisApplication.Models.meshingStage>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.caseName)
+            </th>
+            <!--
+            <th>
+                Html.DisplayNameFor(model => model.meshedDate)
+            </th>
+-->
+            <th>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unitModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.caseName)
+            </td>
+            <!--
+            <td>
+                Html.DisplayFor(modelItem => item.meshedDate)
+            </td>
+-->
+            <td>
+                @Html.DisplayFor(modelItem => item.inputFilename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unitModel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uploadDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <p>
+                    <a asp-action="Create" asp-route-id="@item.ID">Create Mesh</a>
+                </p>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

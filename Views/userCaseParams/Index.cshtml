@@ -1,0 +1,1306 @@
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div id="container"></div>
+
+<div class="row">
+    <div class="col-md-6" style="max-width:580px">
+        <div id="custom_canvas" style="max-width:580px"></div>
+    </div>
+    <div class="col-md-6">
+        SMTH
+    </div>
+</div>
+
+<script src="~/js/three.js"></script>
+<script src="~/js/three.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/VTKLoader.js"></script>
+<script src="~/js/TrackballControls.js"></script>
+<script src="~/js/stats.js"></script>
+<script src="~/js/detector.js"></script>
+<script src="~/js/OrbitControls.js"></script>
+<script src="~/js/Lut.js"></script>
+<script src="~/js/stats.min.js"></script>
+
+
+<script>
+
+    // Routine to get URL of server location
+    var win_protocol = window.location.protocol;
+    var win_hostname = window.location.hostname;
+    var win_port = window.location.port;
+    var filePath = "";
+
+    // Routine to assemble path to chosen file
+    if (win_protocol.length > 1) {
+        filePath = filePath + win_protocol;
+        if (win_hostname.length > 1) {
+            filePath = filePath + "\\\\" + win_hostname;
+        }
+        if (win_port.length > 1) {
+            filePath = filePath + ":" + win_port;
+        }
+    }
+    filePath = filePath + "\\testModels\\";
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var container, stats;
+
+			var camera, controls, scene, renderer;
+
+			var cross;
+
+			init();
+			animate();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 1e10 );
+				camera.position.z = 0.2;
+
+				controls = new THREE.TrackballControls( camera );
+
+				controls.rotateSpeed = 5.0;
+				controls.zoomSpeed = 5;
+				controls.panSpeed = 2;
+
+				controls.noZoom = false;
+				controls.noPan = false;
+
+				controls.staticMoving = true;
+				controls.dynamicDampingFactor = 0.3;
+
+				scene = new THREE.Scene();
+
+				scene.add( camera );
+
+				// light
+
+				var dirLight = new THREE.DirectionalLight( 0xffffff );
+				dirLight.position.set( 200, 200, 1000 ).normalize();
+
+				camera.add( dirLight );
+				camera.add( dirLight.target );
+
+
+				//var material = new THREE.MeshLambertMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+
+				var loader = new THREE.VTKLoader();
+				loader.load( filePath + "motorBike.txt", function ( geometry,material ) {
+
+
+					geometry.center();
+					geometry.computeVertexNormals();
+
+					geom = new THREE.Geometry().fromBufferGeometry(geometry);
+					console.log(geom);
+					geom.colorsNeedUpdate = true;
+					console.log(geom.colors);
+					/*
+					var material = new THREE.MeshLambertMaterial({
+
+				        side: THREE.DoubleSide,
+				        color: 0x123123,
+				        vertexColors: THREE.FaceColors
+
+				    });*/
+					//material.side = THREE.DoubleSide;
+
+					var mesh = new THREE.Mesh( geometry, material );
+
+					console.log(mesh);
+					mesh.side = THREE.DoubleSide;
+
+					console.log(geometry);
+					mesh.position.set( - 0.075, 0.005, 0 );
+					mesh.scale.multiplyScalar( 0.2 );
+					scene.add( mesh );
+
+				} );
+
+                /*
+				var loader1 = new THREE.VTKLoader();
+				loader1.load( 'models/vtk/pressure.vtk', function ( geometry ) {
+
+					geometry.computeVertexNormals();
+					geometry.center();
+
+					var material = new THREE.MeshLambertMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
+					var mesh = new THREE.Mesh( geometry, material );
+
+					mesh.position.set( - 0.025, 0, 0 );
+					mesh.scale.multiplyScalar( 0.01 );
+
+
+					scene.add( mesh );
+
+				} );
+
+                
+				var loader2 = new THREE.VTKLoader();
+				loader2.load( 'models/vtk/liver.vtk', function ( geometry ) {
+
+					geometry.computeVertexNormals();
+					geometry.center();
+
+					var material = new THREE.MeshLambertMaterial( { color: 0x0000ff, side: THREE.DoubleSide } );
+					var mesh = new THREE.Mesh( geometry, material );
+
+					mesh.position.set( 0.025, 0, 0 );
+					mesh.scale.multiplyScalar( 0.01 );
+
+
+					scene.add( mesh );
+
+				} );
+
+				var loader3 = new THREE.VTKLoader();
+				loader3.load( 'models/vtk/cube_no_compression.vtp', function ( geometry ) {
+
+					geometry.computeVertexNormals();
+					geometry.center();
+
+					var material = new THREE.MeshLambertMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+					var mesh = new THREE.Mesh( geometry, material );
+
+					mesh.position.set( 0.075, 0, 0 );
+					mesh.scale.multiplyScalar( 0.01 );
+
+
+					scene.add( mesh );
+
+				} );
+                */
+				// renderer
+
+				renderer = new THREE.WebGLRenderer( { antialias: false } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				controls.handleResize();
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				controls.update();
+				renderer.render( scene, camera );
+
+				stats.update();
+
+			}
+
+</script>
+
+
+<!--
+<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var container, stats;
+
+			var camera, scene, renderer;
+
+			var mesh, mesh2, mesh3, light;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 1800;
+
+				scene = new THREE.Scene();
+
+				light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 0, 0, 1 ).normalize();
+				scene.add( light );
+
+				var loader = new THREE.JSONLoader();
+
+				//loader.load( "obj/cubecolors/cubecolors.js", createScene1 );
+				loader.load( "out.js", createScene2 );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function createScene1( geometry, materials ) {
+
+				//materials[ 0 ].shading = THREE.FlatShading;
+
+				mesh = new THREE.Mesh( geometry);
+				mesh.position.x = 400;
+				mesh.scale.x = mesh.scale.y = mesh.scale.z = 250;
+				scene.add( mesh );
+
+			}
+
+			function createScene2( geometry, materials ) {
+
+				materials[ 0 ].shading = THREE.FlatShading;
+			    //mesh2 = new THREE.Mesh( geometry, new THREE.MultiMaterial(materials));
+                
+				mesh2 = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+                //materials
+			    //var material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+                //
+				//mesh2 = new THREE.Mesh( geometry, material);
+				mesh2.position.x = - 400;
+				mesh2.scale.x = mesh2.scale.y = mesh2.scale.z = 250;
+				scene.add( mesh2 );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				camera.position.x += ( mouseX - camera.position.x ) * 0.05;
+				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
+
+				camera.lookAt( scene.position );
+
+				if ( mesh ) {
+
+					mesh.rotation.x += 0.01;
+					mesh.rotation.y += 0.01;
+				}
+
+				if ( mesh2 ) {
+
+					mesh2.rotation.x += 0.01;
+					mesh2.rotation.y += 0.01;
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+</script>
+-->
+<!--
+<script>
+
+			if ( ! Detector.webgl ) { Detector.addGetWebGLMessage(); }
+
+			var container, stats;
+
+			var camera, scene, renderer, lut, legendLayout;
+
+			var position;
+
+			var mesh;
+
+			var colorMap;
+			var numberOfColors;
+
+    //added by me colors
+			var material_color;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+				// SCENE
+				scene = new THREE.Scene();
+
+				// CAMERA
+				camera = new THREE.PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.name = 'camera';
+				scene.add( camera );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				stats.domElement.style.zIndex = 100;
+				container.appendChild( stats.domElement );
+
+				// LIGHT
+				var ambientLight = new THREE.AmbientLight( 0x444444 );
+				ambientLight.name = 'ambientLight';
+				scene.add( ambientLight );
+
+				colorMap = 'rainbow';
+				numberOfColors = 512;
+
+				legendLayout = 'vertical';
+
+
+				material_color = loadColors();
+				//checkVar();
+			    // first obtain colors!
+                /*
+				function checkVar() {
+				    if (typeof material_color == 'undefined') {
+				        material_color = loadColors();
+				        checkVar();
+				    }
+				    else {
+				    }
+				}*/
+				
+                
+				//setTimeout(console.log(material_color.length),5000);
+				//console.log(material_color.length);
+				loadModel(colorMap, numberOfColors, legendLayout);
+				//loadModel( colorMap, numberOfColors, legendLayout );
+
+				camera.position.x = 0;
+				camera.position.y = 0;
+				camera.position.z = 15;
+
+				var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.7 );
+				directionalLight.position.x = 17;
+				directionalLight.position.y = 9;
+				directionalLight.position.z = 30;
+				directionalLight.name = 'directionalLight';
+				scene.add( directionalLight );
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setClearColor( 0xffffff );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize(  window.innerWidth,  window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				window.addEventListener( "keydown", onKeyDown, true);
+
+			}
+
+			var rotWorldMatrix;
+
+			function rotateAroundWorldAxis( object, axis, radians ) {
+
+				if ( ! axis ) return;
+
+				rotWorldMatrix = new THREE.Matrix4();
+				rotWorldMatrix.makeRotationAxis( axis.normalize(), radians );
+				rotWorldMatrix.multiply( object.matrix );
+
+				object.matrix = rotWorldMatrix;
+				object.rotation.setFromRotationMatrix( object.matrix );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				render();
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				rotateAroundWorldAxis(mesh, position, Math.PI / 180);
+
+				renderer.render( scene, camera );
+
+			}
+
+			function loadColors()
+			{
+			    /*var temp_material_color;
+			    var loader = new THREE.BufferGeometryLoader();
+			    loader.load("/pressure_init.json", function (color_geometry) {
+			        temp_material_color = color_geometry.attributes.pressure.array;
+			        console.log(color_geometry.attributes.position.array.length);
+			        console.log(color_geometry.attributes.pressure.array.length);
+			        console.log(temp_material_color.length);
+			        
+			    });
+			    return temp_material_color;
+			    //console.log(material_color.length);*/
+			}
+
+			function loadModel ( colorMap, numberOfColors, legendLayout ) {
+
+			    var loader = new THREE.VTKLoader();
+			    //var loader = new THREE.JSONLoader();
+
+			    //loader.load("/out.js", function (old_geometry) {
+                loader.load("~/testModels/motorBike.vtk")
+			        //console.log(material_color.length);
+                    
+			    
+			        //old_geometry.computeVertexNormals();
+
+			        console.log(old_geometry.colorNumbers);
+			        console.log(old_geometry.colorValue);
+			        console.log(old_geometry.getColor);
+			        console.log(old_geometry.VertexColors);
+			 
+			        var geometry = new THREE.BufferGeometry().fromGeometry(old_geometry);
+
+			        var color_geom = new THREE.Geometry().fromBufferGeometry(geometry);
+
+			        console.log(color_geom.colors.length);
+			        console.log(old_geometry.colors.length);
+                    //geometry.toJSON.
+			        //console.log(geometry.groups.color[0]);
+				    //bufferGeo.attributes.position.array();
+
+				    var material = new THREE.MeshLambertMaterial({
+
+				        side: THREE.DoubleSide,
+				        color: 0xF5F5F5,
+				        vertexColors: THREE.VertexColors
+
+				    });
+
+
+				    var lutColors = [];
+
+				    lut = new THREE.Lut(colorMap, numberOfColors);
+
+				    lut.setMax(11);
+				    lut.setMin(8);
+                    
+                    
+				    for (var i = 0; i < color_geom.colors.length; i++) {
+
+				        
+				        //console.log(color_geom.colors);
+				        //console.log(geometry.att);
+				        //console.log(color_geom.colors[0].colorValue);
+				        var colorValue = color_geom.colors[i];
+				        color = lut.getColor(colorValue);
+
+				        if (color == undefined) {
+
+				            console.log("ERROR: " + colorValue);
+
+				        } else {
+
+				            lutColors[3 * i] = color.r;
+				            lutColors[3 * i + 1] = color.g;
+				            lutColors[3 * i + 2] = color.b;
+
+				        }
+
+				    }
+
+				    geometry.addAttribute('color', new THREE.BufferAttribute(new Float32Array(lutColors), 3));
+
+				    mesh = new THREE.Mesh(geometry, material);
+
+				    geometry.computeBoundingBox();
+				    var boundingBox = geometry.boundingBox;
+				    var center = boundingBox.center();
+
+				    if (position === undefined) {
+
+				        position = new THREE.Vector3(center.x, center.y, center.z);
+
+				    }
+
+				    scene.add(mesh);
+
+                    
+				    if (legendLayout) {
+
+				        if (legendLayout == 'horizontal') {
+
+				            legend = lut.setLegendOn({ 'layout': 'horizontal', 'position': { 'x': 0, 'y': 1, 'z': 0 } });
+
+				        }
+
+				        else {
+
+				            legend = lut.setLegendOn();
+
+				        }
+
+				        scene.add(legend);
+
+				        var labels = lut.setLegendLabels({ 'title': 'Pressure', 'um': 'Pa', 'ticks': 5 });
+
+				        scene.add(labels['title']);
+
+				        for (var i = 0; i < Object.keys(labels['ticks']).length; i++) {
+
+				            scene.add(labels['ticks'][i]);
+				            scene.add(labels['lines'][i]);
+
+				        }
+				    }
+
+				});
+
+                /*
+				var loader = new THREE.BufferGeometryLoader();
+
+				loader.load( "models/json/test.json", function( geometry ) {
+
+					geometry.computeVertexNormals();
+					geometry.normalizeNormals();
+
+					var material = new THREE.MeshLambertMaterial( {
+
+						side: THREE.DoubleSide,
+						color: 0xF5F5F5,
+						vertexColors: THREE.VertexColors
+
+					} );
+
+					var lutColors = [];
+
+					lut = new THREE.Lut( colorMap, numberOfColors );
+
+					lut.setMax( 11 );
+					lut.setMin( 8 );
+
+					for ( var i = 0; i < geometry.attributes.pressure.array.length; i++ ) {
+
+						var colorValue = geometry.attributes.pressure.array[ i ];
+
+						color = lut.getColor( colorValue );
+
+						if ( color == undefined ) {
+
+							console.log( "ERROR: " + colorValue );
+
+						} else {
+
+							lutColors[ 3 * i     ] = color.r;
+							lutColors[ 3 * i + 1 ] = color.g;
+							lutColors[ 3 * i + 2 ] = color.b;
+
+						}
+
+					}
+
+					geometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( lutColors ), 3 ) );
+
+					mesh = new THREE.Mesh ( geometry, material );
+
+					geometry.computeBoundingBox();
+					var boundingBox = geometry.boundingBox;
+					var center = boundingBox.center();
+
+					if ( position === undefined ) {
+
+						position = new THREE.Vector3(center.x, center.y, center.z);
+
+					}
+
+					scene.add ( mesh );
+
+					if ( legendLayout ) {
+
+						if ( legendLayout == 'horizontal' ) {
+
+							legend = lut.setLegendOn( { 'layout':'horizontal', 'position': { 'x': 21, 'y': 6, 'z': 5 } } );
+
+						}
+
+						else {
+
+							legend = lut.setLegendOn();
+
+						}
+
+						scene.add ( legend );
+
+						var labels = lut.setLegendLabels( { 'title': 'Pressure', 'um': 'Pa', 'ticks': 5 } );
+
+						scene.add ( labels['title'] );
+
+						for ( var i = 0; i < Object.keys( labels[ 'ticks' ] ).length; i++ ) {
+
+							scene.add ( labels[ 'ticks' ][ i ] );
+							scene.add ( labels[ 'lines' ][ i ] );
+
+						}
+
+					}
+
+				} );
+                
+			}*/
+
+			function cleanScene () {
+
+				var elementsInTheScene = scene.children.length;
+
+				for ( var i = elementsInTheScene-1; i > 0; i-- ) {
+
+					if ( scene.children [ i ].name != 'camera' &&
+						 scene.children [ i ].name != 'ambientLight' &&
+						 scene.children [ i ].name != 'directionalLight') {
+
+						scene.remove ( scene.children [ i ] );
+
+					}
+
+				}
+
+			}
+
+
+			function onKeyDown ( e ) {
+
+				var maps = [ 'rainbow', 'cooltowarm', 'blackbody', 'grayscale' ];
+
+				var colorNumbers = ['16', '128', '256', '512' ];
+
+				if ( e.keyCode == 65 ) {
+
+					cleanScene();
+
+					var index = maps.indexOf( colorMap ) >= maps.length - 1 ? 0 : maps.indexOf( colorMap ) + 1;
+
+					colorMap = maps [ index ];
+
+					loadModel ( colorMap, numberOfColors, legendLayout );
+
+				} else if ( e.keyCode == 83 ) {
+
+					cleanScene();
+
+					var index = colorNumbers.indexOf( numberOfColors ) >= colorNumbers.length - 1 ? 0 : colorNumbers.indexOf( numberOfColors ) + 1;
+
+					numberOfColors = colorNumbers [ index ];
+
+					loadModel ( colorMap ,  numberOfColors, legendLayout );
+
+				} else if ( e.keyCode == 68 ) {
+
+					if ( ! legendLayout ) {
+
+						cleanScene();
+
+						legendLayout = 'vertical';
+
+						loadModel ( colorMap ,  numberOfColors, legendLayout );
+
+					} else {
+
+						cleanScene();
+
+						legendLayout = lut.setLegendOff();
+
+						loadModel ( colorMap ,  numberOfColors, legendLayout );
+
+					}
+
+				} else if ( e.keyCode == 70 ) {
+
+					cleanScene();
+
+					if ( ! legendLayout ) return false;
+
+					lut.setLegendOff();
+
+					if ( legendLayout == 'horizontal') {
+
+						legendLayout = 'vertical';
+
+					} else {
+
+						legendLayout = 'horizontal';
+
+					}
+
+					loadModel ( colorMap ,  numberOfColors, legendLayout );
+
+				}
+
+			}
+
+</script>
+
+<!--
+<script>
+
+
+    
+            var camera, scene, renderer,
+            geometry, material, mesh, light1, stats, controls;
+            function trim (str) {
+                str = str.replace(/^\s+/, '');
+                for (var i = str.length - 1; i >= 0; i--) {
+                    if (/\S/.test(str.charAt(i))) {
+                        str = str.substring(0, i + 1);
+                        break;
+                    }
+                }
+                return str;
+            }
+
+
+            // Notes:
+            // - STL file format: http://en.wikipedia.org/wiki/STL_(file_format)
+            // - 80 byte unused header
+            // - All binary STLs are assumed to be little endian, as per wiki doc
+            var parseStlBinary = function(stl) {
+                var geo = new THREE.Geometry();
+                var dv = new DataView(stl, 80); // 80 == unused header
+                var isLittleEndian = true;
+                var triangles = dv.getUint32(0, isLittleEndian);
+                // console.log('arraybuffer length:  ' + stl.byteLength);
+                // console.log('number of triangles: ' + triangles);
+                var offset = 4;
+                for (var i = 0; i < triangles; i++) {
+                    // Get the normal for this triangle
+                    var normal = new THREE.Vector3(
+                        dv.getFloat32(offset, isLittleEndian),
+                        dv.getFloat32(offset+4, isLittleEndian),
+                        dv.getFloat32(offset+8, isLittleEndian)
+                    );
+                    offset += 12;
+                    // Get all 3 vertices for this triangle
+                    for (var j = 0; j < 3; j++) {
+                        geo.vertices.push(
+                            new THREE.Vector3(
+                                dv.getFloat32(offset, isLittleEndian),
+                                dv.getFloat32(offset+4, isLittleEndian),
+                                dv.getFloat32(offset+8, isLittleEndian)
+                            )
+                        );
+                        offset += 12
+                    }
+                    // there's also a Uint16 "attribute byte count" that we
+                    // don't need, it should always be zero.
+                    offset += 2;
+                    // Create a new face for from the vertices and the normal
+                    geo.faces.push(new THREE.Face3(i*3, i*3+1, i*3+2, normal));
+                }
+                // The binary STL I'm testing with seems to have all
+                // zeroes for the normals, unlike its ASCII counterpart.
+                // We can use three.js to compute the normals for us, though,
+                // once we've assembled our geometry. This is a relatively
+                // expensive operation, but only needs to be done once.
+                geo.computeFaceNormals();
+                mesh = new THREE.Mesh(
+                    geo,
+                    // new THREE.MeshNormalMaterial({
+                    //     overdraw:true
+                    // }
+                    new THREE.MeshLambertMaterial({
+                        overdraw:true,
+                        color: 0xaa0000,
+                        shading: THREE.FlatShading
+                    }
+                ));
+                scene.add(mesh);
+                stl = null;
+            };
+            var parseStl = function(stl) {
+                var state = '';
+                var lines = stl.split('\n');
+                var geo = new THREE.Geometry();
+                var name, parts, line, normal, done, vertices = [];
+                var vCount = 0;
+                stl = null;
+                for (var len = lines.length, i = 0; i < len; i++) {
+                    if (done) {
+                        break;
+                    }
+                    line = trim(lines[i]);
+                    parts = line.split(' ');
+                    switch (state) {
+                        case '':
+                            if (parts[0] !== 'solid') {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "solid"');
+                                return;
+                            } else {
+                                name = parts[1];
+                                state = 'solid';
+                            }
+                            break;
+                        case 'solid':
+                            if (parts[0] !== 'facet' || parts[1] !== 'normal') {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "facet normal"');
+                                return;
+                            } else {
+                                normal = [
+                                    parseFloat(parts[2]),
+                                    parseFloat(parts[3]),
+                                    parseFloat(parts[4])
+                                ];
+                                state = 'facet normal';
+                            }
+                            break;
+                        case 'facet normal':
+                            if (parts[0] !== 'outer' || parts[1] !== 'loop') {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "outer loop"');
+                                return;
+                            } else {
+                                state = 'vertex';
+                            }
+                            break;
+                        case 'vertex':
+                            if (parts[0] === 'vertex') {
+                                geo.vertices.push(new THREE.Vector3(
+                                    parseFloat(parts[1]),
+                                    parseFloat(parts[2]),
+                                    parseFloat(parts[3])
+                                ));
+                            } else if (parts[0] === 'endloop') {
+                                geo.faces.push( new THREE.Face3( vCount*3, vCount*3+1, vCount*3+2, new THREE.Vector3(normal[0], normal[1], normal[2]) ) );
+                                vCount++;
+                                state = 'endloop';
+                            } else {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "vertex" or "endloop"');
+                                return;
+                            }
+                            break;
+                        case 'endloop':
+                            if (parts[0] !== 'endfacet') {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "endfacet"');
+                                return;
+                            } else {
+                                state = 'endfacet';
+                            }
+                            break;
+                        case 'endfacet':
+                            if (parts[0] === 'endsolid') {
+                                //mesh = new THREE.Mesh( geo, new THREE.MeshNormalMaterial({overdraw:true}));
+                                mesh = new THREE.Mesh(
+                                    geo,
+                                    new THREE.MeshLambertMaterial({
+                                        overdraw:true,
+                                        color: 0xaa0000,
+                                        shading: THREE.FlatShading
+                                    }
+                                ));
+                                scene.add(mesh);
+                                done = true;
+                            } else if (parts[0] === 'facet' && parts[1] === 'normal') {
+                                normal = [
+                                    parseFloat(parts[2]),
+                                    parseFloat(parts[3]),
+                                    parseFloat(parts[4])
+                                ];
+                                if (vCount % 1000 === 0) {
+                                    console.log(normal);
+                                }
+                                state = 'facet normal';
+                            } else {
+                                console.error(line);
+                                console.error('Invalid state "' + parts[0] + '", should be "endsolid" or "facet normal"');
+                                return;
+                            }
+                            break;
+                        default:
+                            console.error('Invalid state "' + state + '"');
+                            break;
+                    }
+                }
+            };
+
+            init();
+            animate();
+            function init() {
+                //Detector.addGetWebGLMessage();
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera.position.z = 70;
+                camera.position.y = 0;
+                scene.add(camera);
+
+                /*
+                var directionalLight = new THREE.DirectionalLight( 0xffffff );
+                directionalLight.position.x = 0;
+                directionalLight.position.y = 100;
+                directionalLight.position.z = 1000;
+                directionalLight.position.normalize();
+                scene.add(directionalLight);
+                */
+                scene.add(new THREE.AmbientLight(0x736F6E));
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if ( xhr.readyState == 4 ) {
+                        if ( xhr.status == 200 || xhr.status == 0 ) {
+                            var rep = xhr.response; // || xhr.mozResponseArrayBuffer;
+                            console.log(rep);
+                            parseStlBinary(rep);
+                            //parseStl(xhr.responseText);
+                            mesh.rotation.x = 5;
+                            mesh.rotation.z = .25;
+                            console.log('done parsing');
+                        }
+                    }
+                }
+                xhr.onerror = function(e) {
+                    console.log(e);
+                }
+
+                xhr.open( "GET", '/testModels/Audi_R8.stl', true );
+                xhr.responseType = "arraybuffer";
+                //xhr.setRequestHeader("Accept","text/plain");
+                //xhr.setRequestHeader("Content-Type","text/plain");
+                //xhr.setRequestHeader('charset', 'x-user-defined');
+                xhr.send( null );
+                renderer = new THREE.WebGLRenderer(); //new THREE.CanvasRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                document.body.appendChild( renderer.domElement );
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.top = '0px';
+
+
+
+                // for controls?
+                controls = new THREE.TrackballControls(camera, renderer.domElement);
+                controls.minDistance = 20;
+                controls.maxDistance = 5000;
+
+                controls.rotateSpeed = 1.0;
+                controls.zoomSpeed = 1.2;
+                controls.panSpeed = 0.8;
+                controls.noZoom = false;
+                controls.noPan = false;
+                controls.staticMoving = true;
+
+                controls.dynamicDampingFactor = 0.3;
+                controls.keys = [65, 83, 68];
+
+                document.body.appendChild(stats.domElement);
+            }
+            function animate() {
+                // note: three.js includes requestAnimationFrame shim
+                requestAnimationFrame(animate);
+                controls.update();
+                render();
+                stats.update();
+            }
+            function render() {
+                //mesh.rotation.x += 0.01;
+                /*if (mesh) {
+                    mesh.rotation.z += 0.02;
+                }*/
+                //light1.position.z -= 1;
+                renderer.render( scene, camera );
+            }
+
+</script>
+<!--
+<script>
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+			var container, stats;
+			var camera, controls, scene, renderer;
+			var cross;
+
+			init();
+			animate();
+			function init() {
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
+				camera.position.z = 500;
+				controls = new THREE.TrackballControls( camera );
+				controls.rotateSpeed = 1.0;
+				controls.zoomSpeed = 1.2;
+				controls.panSpeed = 0.8;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = true;
+				controls.dynamicDampingFactor = 0.3;
+				controls.keys = [ 65, 83, 68 ];
+				controls.addEventListener('change', render);
+
+				// world
+				scene = new THREE.Scene();
+
+				//scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+				var geometry = new THREE.CylinderGeometry( 0, 10, 30, 4, 1 );
+				var material = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading });
+
+			    // object
+				var loader = new THREE.STLLoader()
+
+				var material = new THREE.MeshLambertMaterial({ ambient: 0xFB3917, color: 0xfdd977 });
+
+				loader.load('./testModels/porsche.stl', function (geometry) {
+				    var mesh = new THREE.Mesh(geometry, material);
+				    mesh.castShadow = true;
+				    mesh.receiveShadow = true;
+				    scene.add(mesh);
+				});
+
+                // ADD COORDINATE SYSTEM!!
+				for ( var i = 0; i < 500; i ++ ) {
+					var mesh = new THREE.Mesh( geometry, material );
+					mesh.position.x = ( Math.random() - 0.5 ) * 1000;
+					mesh.position.y = ( Math.random() - 0.5 ) * 1000;
+					mesh.position.z = ( Math.random() - 0.5 ) * 1000;
+					mesh.updateMatrix();
+					mesh.matrixAutoUpdate = false;
+					scene.add( mesh );
+				}
+
+				// lights
+				light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 1, 1, 1 );
+				scene.add( light );
+				light = new THREE.DirectionalLight( 0x002288 );
+				light.position.set( -1, -1, -1 );
+				scene.add( light );
+				light = new THREE.AmbientLight( 0x222222 );
+				scene.add(light);
+
+				// renderer
+				renderer = new THREE.WebGLRenderer({ antialias: false });
+
+				//renderer.setClearColor(scene.fog.color);
+
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth/2.5, window.innerHeight/2.5 );
+				container = document.getElementById('custom_canvas');
+
+				container.appendChild( renderer.domElement );
+				stats = new Stats();
+				//container.appendChild( stats.dom );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+				//
+				render();
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth/2.5, window.innerHeight/2.5 );
+				controls.handleResize();
+				render();
+			}
+			function animate() {
+				requestAnimationFrame( animate );
+				controls.update();
+			}
+			function render() {
+				renderer.render( scene, camera );
+				stats.update();
+			}
+</script>
+
+<!--
+<script>
+
+
+var container, camera, scene, renderer, controls;
+
+init();
+animate();
+
+function init(){
+    container = document.createElement('div');
+
+    // Not working?! TODO
+    //$(".custom_canvas").append(container);
+    var smth = document.getElementById("custom_canvas");
+    smth.appendChild(container);
+    //document.body.appendChild(container);
+
+    camera=new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.set(3000, 1500, 3000);
+
+    var canvas_width = window.innerWidth / 3;
+    var canvas_height = window.innerHeight / 3;
+
+
+    scene=new THREE.Scene();
+
+    // object
+    var loader = new THREE.STLLoader();
+
+    /*
+    loader.addEventListener('load', function (event){
+        var geometry=event.content;
+        var material=new THREE.MeshLambertMaterial({ ambient: 0xFBB917,color: 0xfdd017 });
+        var mesh=new THREE.Mesh(geometry, material);
+        scene.add(mesh);});
+
+    // STL file to be loaded
+    loader.load('./stl/3knot.scad.stl');
+    */
+    var material = new THREE.MeshLambertMaterial({ ambient: 0xFB3917, color: 0xfdd977 });
+
+    loader.load('./testModels/Audi_R8.stl', function (geometry) {
+
+        var mesh = new THREE.Mesh(geometry, material);
+
+       
+
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        scene.add(mesh);
+    });
+
+    // lights
+    scene.add(new THREE.AmbientLight(0x736F6E));
+
+    var directionalLight=new THREE.DirectionalLight(0xffffff, 1);
+    //directionalLight.position = camera.position;
+    directionalLight.position.set(30000, 15000, 30000);
+    scene.add(directionalLight);
+
+    scene.add(new THREE.AmbientLight(0x012309));
+
+    // renderer
+ 
+    renderer=new THREE.WebGLRenderer({ antialias: true });
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    //renderer.setSize(custom_canvas.clientWidth, custom_canvas.clientHeight);
+    //renderer.setSize(648, 480);
+    //renderer.setPixelRatio(1);
+    renderer.setSize(canvas_width, canvas_height);
+
+    container.appendChild(renderer.domElement);
+
+    // for controls?
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    //controls.addEventListener( 'change', render ); // add this only if there is no animation loop (requestAnimationFrame)
+    
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = false;
+
+    //controls.dynamicDampingFactor = 0.3;
+    //controls.keys = [65, 83, 68];
+
+
+    window.addEventListener('resize', onWindowResize, false);}
+
+function addLight(x, y, z, color, intensity){
+    var directionalLight=new THREE.DirectionalLight(color, intensity);
+    directionalLight.position.set(x, y, z)
+    scene.add(directionalLight);
+}
+
+function onWindowResize(){
+    camera.aspect=window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    var canvas_width = window.innerWidth / 3;
+    var canvas_height = window.innerHeight / 3;
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    //renderer.setSize(custom_canvas.clientWidth, custom_canvas.clientHeight);
+    //renderer.setSize(648, 480);
+    //renderer.setPixelRatio(1);
+    renderer.setSize(canvas_width, canvas_height);
+}
+
+  function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      //controls.po
+      render();
+  }
+
+  function render(){
+      //var timer=Date.now() * 0.0005;
+      //r=150;
+      //camera.position.x=r*Math.cos(timer);
+      //camera.position.z=r*Math.sin(timer);
+      camera.lookAt(scene.position);
+      renderer.render(scene, camera);
+      renderer.setClearColor(0xf5f5f5, 1);}
+    </script>
+
+    <!---->

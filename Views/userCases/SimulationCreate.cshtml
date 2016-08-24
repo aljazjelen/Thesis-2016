@@ -1,0 +1,382 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "SimulationCreate";
+    Layout = "_Layout";
+}
+<link rel="stylesheet" href="~/css/customLayoutStyle.css" />
+
+<br /><br /><br /><br /><br /><br />
+<h2>SimulationCreate</h2>
+
+<form asp-action="CreateSimulation">
+    <div class="form-horizontal">
+        <h4>Chosen case:</h4>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.caseName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.caseName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.inputFilename)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.uploadDate)
+            </dd>
+        </dl>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @Html.Partial("/Views/Shared/_partialMeshingHiddenFields.cshtml")
+        @Html.Partial("/Views/Shared/_partialGeneralHiddenFields.cshtml")
+        
+        <hr />
+        <h4>Fluid details and operating conditions</h4>
+
+        <div class="row">
+            <div class="col-md-4">
+                <br />
+                All physical properties have standardized measure by the <a href="https://en.wikipedia.org/wiki/International_System_of_Units">SI Units</a>.
+                <br /><br />
+                Flow direction is normalized after user input.
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="visualization_operatingPressure" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_operatingPressure" class="form-control" />
+                        <span asp-validation-for="visualization_operatingPressure" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_operatingtemperature" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_operatingtemperature" class="form-control" />
+                        <span asp-validation-for="visualization_operatingtemperature" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_flowSpeed" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_flowSpeed" class="form-control" />
+                        <span asp-validation-for="visualization_flowSpeed" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="visualization_flowDirectionX" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_flowDirectionX" class="form-control" />
+                        <span asp-validation-for="visualization_flowDirectionX" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_flowDirectionY" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_flowDirectionY" class="form-control" />
+                        <span asp-validation-for="visualization_flowDirectionY" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_flowDirectionZ" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_flowDirectionZ" class="form-control" />
+                        <span asp-validation-for="visualization_flowDirectionZ" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <h4>Sampling details</h4>
+        <h5>Digital Wind Tunnel supports up to 3 probe locations and cutting planes. This section offers a tool to set custom probes and planes for advanced result inspection.</h5>
+        <br />
+        <h5><strong>Probe locations</strong></h5>
+        <div class="row">
+            <div class="col-md-3">
+                <br />
+                All geometrical properties have standardized measure by the <a href="https://en.wikipedia.org/wiki/International_System_of_Units">SI Units</a>. Coordinates are in meters!
+                <br /><br />
+                First choose the number of probe locations and then set up the coordinates
+                <br /><br />
+                <div class="form-group">
+                    <label asp-for="visualization_numProbes" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_numProbes" class="form-control" id="numProbes" />
+                        <span asp-validation-for="visualization_numProbes" class="text-danger" />
+                        <p class="has-error" id="visualization_probes_error"></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Probe 1 -->
+            <div class="col-md-3" id="probe_1st">
+                <div class="form-group">
+                    <label asp-for="visualization_probe1x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe1x" class="form-control" />
+                        <span asp-validation-for="visualization_probe1x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe1y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe1y" class="form-control" />
+                        <span asp-validation-for="visualization_probe1y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe1z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe1z" class="form-control" />
+                        <span asp-validation-for="visualization_probe1z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <!-- Probe 2 -->
+            <div class="col-md-3" id="probe_2nd">
+                <div class="form-group">
+                    <label asp-for="visualization_probe2x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe2x" class="form-control" />
+                        <span asp-validation-for="visualization_probe2x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe2y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe2y" class="form-control" />
+                        <span asp-validation-for="visualization_probe2y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe2z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe2z" class="form-control" />
+                        <span asp-validation-for="visualization_probe2z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <!-- Probe 3 -->
+            <div class="col-md-3" id="probe_3rd">
+                <div class="form-group">
+                    <label asp-for="visualization_probe3x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe3x" class="form-control" />
+                        <span asp-validation-for="visualization_probe3x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe3y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe3y" class="form-control" />
+                        <span asp-validation-for="visualization_probe3y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_probe3z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_probe3z" class="form-control" />
+                        <span asp-validation-for="visualization_probe3z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- Cutting planes -->
+        <br /><br /><br />
+        <h5><strong>Cutting planes</strong></h5>
+        <div class="row">
+            <div class="col-md-3">
+                <br />
+                All geometrical properties have standardized measure by the <a href="https://en.wikipedia.org/wiki/International_System_of_Units">SI Units</a>. Coordinates are in meters!
+                <br /><br />
+                First choose the number of cutting planes and then set up the coordinates.
+                <br />
+                In total there are two spatial points that have to be set up. Each plane requires a point and a normal to be fully defined.
+                <br />
+                Point in space defines location of plane whereas normal defines it's orientation.
+                <br /><br />
+                <div class="form-group">
+                    <label asp-for="visualization_numCuts" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_numCuts" class="form-control" id="numCuts" />
+                        <span asp-validation-for="visualization_numCuts" class="text-danger" />
+                        <p class="has-error" id="visualization_cuts_error"></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Plane 1 -->
+            <div class="col-md-3" id="cut_1st">
+                <!-- Point 1-->
+                <div class="form-group">
+                    <label asp-for="visualization_point1x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point1x" class="form-control" />
+                        <span asp-validation-for="visualization_point1x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point1y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point1y" class="form-control" />
+                        <span asp-validation-for="visualization_point1y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point1z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point1z" class="form-control" />
+                        <span asp-validation-for="visualization_point1z" class="text-danger" />
+                    </div>
+                </div>
+                <!-- Normal 1-->
+                <div class="form-group">
+                    <label asp-for="visualization_normal1x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal1x" class="form-control" />
+                        <span asp-validation-for="visualization_normal1x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal1y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal1y" class="form-control" />
+                        <span asp-validation-for="visualization_normal1y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal1z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal1z" class="form-control" />
+                        <span asp-validation-for="visualization_normal1z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <!-- Plane 2 -->
+            <div class="col-md-3" id="cut_2nd">
+                <!-- Point 2-->
+                <div class="form-group">
+                    <label asp-for="visualization_point2x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point2x" class="form-control" />
+                        <span asp-validation-for="visualization_point2x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point2y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point2y" class="form-control" />
+                        <span asp-validation-for="visualization_point2y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point2z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point2z" class="form-control" />
+                        <span asp-validation-for="visualization_point2z" class="text-danger" />
+                    </div>
+                </div>
+                <!-- Normal 2-->
+                <div class="form-group">
+                    <label asp-for="visualization_normal2x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal2x" class="form-control" />
+                        <span asp-validation-for="visualization_normal2x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal2y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal2y" class="form-control" />
+                        <span asp-validation-for="visualization_normal2y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal2z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal2z" class="form-control" />
+                        <span asp-validation-for="visualization_normal2z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <!-- Plane 3 -->
+            <div class="col-md-3" id="cut_3rd">
+                <!-- Point 3-->
+                <div class="form-group">
+                    <label asp-for="visualization_point3x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point3x" class="form-control" />
+                        <span asp-validation-for="visualization_point3x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point3y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point3y" class="form-control" />
+                        <span asp-validation-for="visualization_point3y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_point3z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_point3z" class="form-control" />
+                        <span asp-validation-for="visualization_point3z" class="text-danger" />
+                    </div>
+                </div>
+                <!-- Normal 3 -->
+                <div class="form-group">
+                    <label asp-for="visualization_normal3x" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal3x" class="form-control" />
+                        <span asp-validation-for="visualization_normal3x" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal3y" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal3y" class="form-control" />
+                        <span asp-validation-for="visualization_normal3y" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="visualization_normal3z" class="col-md-6 control-label" style="text-align:right;"></label>
+                    <div class="col-md-6">
+                        <input asp-for="visualization_normal3z" class="form-control" />
+                        <span asp-validation-for="visualization_normal3z" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+  
+
+        <h5>Please double check all configure-able parameters as after case is submitted, <strong>no changes</strong> can be made!</h5>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Run the fan!" class="btn myButton" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/customJavaScript.js"></script>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

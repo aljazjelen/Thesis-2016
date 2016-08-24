@@ -1,0 +1,136 @@
+@model ThesisApplication.Models.meshingStage
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>meshingStage</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.caseName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.caseName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.meshedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.meshedDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.expRatio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.expRatio)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.finLayerThickness)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.finLayerThickness)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.inputFilename)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.inputFilename)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.minThickness)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.minThickness)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.numLayers)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.numLayers)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegDist1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegDist1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegDist2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegDist2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegDist3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegDist3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegLvl1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegLvl1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegLvl2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegLvl2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refRegLvl3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refRegLvl3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refSurfLvlMax)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refSurfLvlMax)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.refSurfLvlMin)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.refSurfLvlMin)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.unitModel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.unitModel)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.uploadDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.uploadDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.userName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.userName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

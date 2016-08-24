@@ -1,0 +1,67 @@
+@model IEnumerable<ThesisApplication.Models.userCase>
+
+@{
+    // Added layout as it is nested in _OpenTheHatch layout
+    Layout = "~/Views/Shared/_OpenTheHatch.cshtml";
+
+    ViewData["Title"] = "Index";
+}
+<h2>List of my cases</h2>
+<h5>Cases are unique entities. They have their own geometry, mesh and results</h5>
+<br />
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<link rel="stylesheet" href="~/css/customLayoutStyle.css" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.caseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unitModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.caseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.inputFilename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unitModel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uploadDate)
+            </td>
+            <td>
+                <a class="myButton btn-warning" asp-action="Details" asp-route-id="@item.ID">Model details</a> |
+                <a class="myButton btn-danger"asp-action="Delete" asp-route-id="@item.ID">Delete case</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+    <a class="myButton" asp-action="Create">Create new case</a>
+

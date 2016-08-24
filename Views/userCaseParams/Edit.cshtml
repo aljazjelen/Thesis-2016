@@ -1,0 +1,86 @@
+@model ThesisApplication.Models.userCaseParam
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>userCaseParam</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <label asp-for="Genre" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Genre" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="caseDirectory" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="caseDirectory" class="form-control" />
+                <span asp-validation-for="caseDirectory" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="caseName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="caseName" class="form-control" />
+                <span asp-validation-for="caseName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="metricConversion" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="metricConversion" class="form-control" />
+                <span asp-validation-for="metricConversion" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="modelName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="modelName" class="form-control" />
+                <span asp-validation-for="modelName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="uploadDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="uploadDate" class="form-control" />
+                <span asp-validation-for="uploadDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="userName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="userName" class="form-control" />
+                <span asp-validation-for="userName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

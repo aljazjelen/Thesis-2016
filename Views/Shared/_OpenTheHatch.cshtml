@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ThesisApplication.Models.userCase>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/three.min.js"></script>
+<script src="~/js/three.js"></script>
+<script src="~/js/STLLoader.js"></script>
+
+ <h3> </h3>
+<ul class="nav nav-tabs nav-justified">
+    <li><a asp-controller="userCases" asp-action="Index">Model repository</a></li>
+    <li><a asp-controller="userCases" asp-action="viewFileUpload">View existing model</a></li>
+</ul>
+<br /><br /><br />
+
+@RenderBody()
+     
+@RenderSection("scripts", required: false)  
+

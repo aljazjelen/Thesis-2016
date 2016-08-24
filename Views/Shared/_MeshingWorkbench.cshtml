@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--
+    WHY LIKE THAT?          TODO
+    Inlcuding Jquery to be defined throught entire OpenTheHatch layout!
+-->
+<link rel="stylesheet" href="~/css/customLayoutStyle.css" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/three.min.js"></script>
+<script src="~/js/three.js"></script>
+<script src="~/js/STLLoader.js"></script>
+
+
+
+    <h3> </h3>
+ 
+            <ul class="nav nav-tabs nav-justified">
+                <li><a asp-controller="userCases" asp-action="Index">Case repository</a></li>
+                <li><a asp-controller="userCases" asp-action="MeshingIndex">Mesh repository</a></li>
+                <li><a asp-controller="userCases" asp-action="viewMesh">Check existing mesh</a></li>
+            </ul>
+
+<br /><br /><br />
+
+        @RenderBody()
+
+        @RenderSection("scripts", required: false)
+
+

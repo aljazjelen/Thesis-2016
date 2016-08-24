@@ -1,0 +1,64 @@
+@model IEnumerable<ThesisApplication.Models.userCase>
+
+@{
+    ViewData["Title"] = "SimulationIndex";
+    Layout = "_Layout";
+}
+<br /><br /><br /><br /><br /><br />
+<h2>Simulation workbench</h2>
+<h5>Place where researchers try to recreate real-life flow conditions and after simulation is over, inspect and evaluate results.</h5>
+<br />
+
+<h2>List of my cases</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.caseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.inputFilename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.meshStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.uploadDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.caseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.inputFilename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.meshStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uploadDate)
+            </td>
+            <td>
+                <a class="myButton" asp-action="CreateSimulation" asp-route-id="@item.ID">Create flow conditions</a> |
+                
+                <!-- redirect to new window, where user can obtain results -->
+                @Html.ActionLink("", "viewSimulationResults", new { controller = "userCases" }, new { target = "_blank" })
+                <a class="myButton btn-warning" href="@Url.Action("viewSimulationResults", "userCases",new { id = item.ID })" target="_blank">Visualize results</a> |
+                <!--<a class="myButton btn-warning" asp-action="VisualizeSimulation" asp-route-id="@item.ID">Visualize results</a> |-->
+                <a class="myButton btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

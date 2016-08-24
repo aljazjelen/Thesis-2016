@@ -1,0 +1,162 @@
+@model ThesisApplication.Models.userCase
+
+@{
+    ViewData["Title"] = "MeshingIndex";
+    Layout = "_Layout";
+}
+
+<h2>MeshingIndex</h2>
+
+<form asp-action="MeshingIndex">
+    <div class="form-horizontal">
+        <h4>userCase</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="caseName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="caseName" class="form-control" />
+                <span asp-validation-for="caseName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="inputFilename" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="inputFilename" class="form-control" />
+                <span asp-validation-for="inputFilename" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_expRatio" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_expRatio" class="form-control" />
+                <span asp-validation-for="mesh_expRatio" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_finLayerThickness" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_finLayerThickness" class="form-control" />
+                <span asp-validation-for="mesh_finLayerThickness" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_minThickness" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_minThickness" class="form-control" />
+                <span asp-validation-for="mesh_minThickness" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_numLayers" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_numLayers" class="form-control" />
+                <span asp-validation-for="mesh_numLayers" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegDist1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegDist1" class="form-control" />
+                <span asp-validation-for="mesh_refRegDist1" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegDist2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegDist2" class="form-control" />
+                <span asp-validation-for="mesh_refRegDist2" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegDist3" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegDist3" class="form-control" />
+                <span asp-validation-for="mesh_refRegDist3" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegLvl1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegLvl1" class="form-control" />
+                <span asp-validation-for="mesh_refRegLvl1" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegLvl2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegLvl2" class="form-control" />
+                <span asp-validation-for="mesh_refRegLvl2" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refRegLvl3" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refRegLvl3" class="form-control" />
+                <span asp-validation-for="mesh_refRegLvl3" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refSurfLvlMax" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refSurfLvlMax" class="form-control" />
+                <span asp-validation-for="mesh_refSurfLvlMax" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="mesh_refSurfLvlMin" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="mesh_refSurfLvlMin" class="form-control" />
+                <span asp-validation-for="mesh_refSurfLvlMin" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="meshedDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="meshedDate" class="form-control" />
+                <span asp-validation-for="meshedDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="status" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="status" class="form-control" />
+                <span asp-validation-for="status" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="unitModel" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="unitModel" class="form-control" />
+                <span asp-validation-for="unitModel" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="uploadDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="uploadDate" class="form-control" />
+                <span asp-validation-for="uploadDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="userName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="userName" class="form-control" />
+                <span asp-validation-for="userName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
