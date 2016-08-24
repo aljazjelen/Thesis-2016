@@ -1,0 +1,272 @@
+﻿body {
+    /*padding-top: 22px; */
+    /*border-top: 20px solid black;*/
+}
+
+/* For customly alligned labels and such */
+.customAlign{
+    text-align: left;
+}
+
+.logo{
+    background-color: #009FE3;
+    border-radius: 76px;
+    margin-left: 30px;
+}
+
+.navbar-default{
+    padding-top: 10px;
+    background-color: #009FE3;
+    color: white;
+    margin-bottom: 0;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: darkslategray;
+    font-family: Arial;
+    font-size:large;
+    display: block;
+    text-align: center;
+    margin: 5px;
+    background-color:whitesmoke;
+    border-radius: 5px;
+}
+
+.navbar-default .navbar-nav > li > a:hover{
+    background-color: lightskyblue;
+    font-family: Arial;
+    font-size:large;
+    display: block;
+    display:inline-block;
+    border-radius: 5px;
+}
+
+.navbar-default .navbar-right > li > a{
+    font-size: medium;
+}
+.navbar-default .navbar-nav > li > button {
+    color: white;
+    font-family: Arial;
+    font-size:medium;
+}
+
+.nav-justified > li > a{
+    color: dimgray;
+    font-family: Arial;
+    font-size:medium;
+}
+
+
+
+
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1600px; /* or 950px */
+}
+
+@media (min-width: 480px) {
+    body{
+        padding-top: 70px
+    }
+.myContainer{
+    width:600px;
+}}
+
+@media (min-width: 768px) {
+    body{
+        padding-top: 65px
+    }
+.myContainer{
+    width:600px;
+}}
+
+@media (min-width: 992px) {
+.myContainer{
+    padding-top: 30px; 
+    width:720px;
+}}
+
+@media (min-width: 1200px) {
+    body {
+    padding-top: 25px; 
+}
+.myContainer{
+    width:1440px;
+}}
+
+/*
+body {
+    padding-top: 22px; 
+    border-top: 70px solid #222;
+}
+*/
+
+#openTheHatch_navbar > li{
+    list-style-type: none;
+    text-align: center;
+    text-decoration: none;
+    font-family: Arial;
+    font-size: 14px;
+    margin: 0;
+}
+
+#openTheHatch_navbar > li > a{
+    min-width: 200px;
+    width: 20vw;
+    list-style-type: none;
+    display: inline-block;
+   
+    background-color: whitesmoke;
+}
+
+#openTheHatch_navbar > li > a:hover{
+    background-color: #009FE3;
+    text-decoration: none;
+}
+
+div > h4.warning{
+    color: darkred;
+}
+
+/* GRADIENTS*/
+    /*background: white; /* For browsers that do not support gradients */
+    /*background: -webkit-linear-gradient(top,#D7E1EE , white); /* For Safari 5.1 to 6.0 */
+    /*background: -o-linear-gradient(top, #D7E1EE, white); /* For Opera 11.1 to 12.0 */
+    /*background: -moz-linear-gradient(top, #D7E1EE, white); /* For Firefox 3.6 to 15 */
+    /*background: linear-gradient(to top, #D7E1EE , white); /* Standard syntax */
+
+
+/* My table header and data style */
+.myTableHeader{
+    width:300px; 
+    text-align:right; 
+    margin-right:30px;
+}
+
+.myTableData{
+    width:300px; 
+    text-align:left;
+}
+
+.dl-horizontal dt{
+    width:300px; 
+    text-align:right; 
+    margin-right:30px;
+}
+
+.dl-horizontal dd{
+    width:300px; 
+    text-align:left;
+}
+
+
+.mytab1{
+}
+
+.mytab1>a:hover{
+    background-color: lightskyblue;
+}
+
+.mytab1 > a:hover{
+    background-color: lightskyblue;
+}
+
+/* Graphs at visualization panel */
+.axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+    .x.axis path {
+        display: normal;
+    }
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+    .tick text {
+        font-size: 12px;
+    }
+  .tick line{
+    opacity: 0.2;
+    }
+
+
+    /*
+        My button style properties
+    */
+.myButton{
+    text-decoration:none;
+    color: white;
+    background-color: #009FE3;
+    display:inline-block;
+    padding: 7px 15px 7px 15px;
+    border-radius: 3px;
+    text-align: center;
+    margin: 2px;
+}
+
+.myButton:hover{
+    color: white;
+    text-decoration:none;
+    box-shadow: inset 0px 0px 100px -40px rgba(0,0,0,1);
+}
+
+
+.popup {
+    width:100%;
+    height:100%;
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    background:rgba(0,0,0,0.75);
+}
+ 
+
+/* POPUP code */
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    height: 20%;
+    box-shadow: none;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
